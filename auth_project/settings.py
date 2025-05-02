@@ -67,8 +67,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'chatbox',
-        'USER': '9rp2ga646aoidm8wcadx',
-        'PASSWORD': 'pscale_pw_ThBFah8TJkg9LMELtl1PijlWfhLqPWMtKkDbU4RNupx',
+        'USER': 'm55rqvg79029xtothsbn',
+        'PASSWORD': 'pscale_pw_S0tz1Abpv3RKf4gDZsKrRGVCXvAzYU5rGLRCKisv0Zd',
         'HOST': 'aws.connect.psdb.cloud',
         'PORT': '3306',
         'OPTIONS': {
