@@ -1,0 +1,169 @@
+{% extends 'base.html' %}
+
+{% block title %}Sign Up - Step 1{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto bg-white p-8 rounded-lg shadow-md">
+    <h1 class="text-2xl font-bold text-gray-900 mb-6">Sign Up - Step 1</h1>
+    <p class="text-gray-600 mb-6">Please provide your basic information</p>
+    
+    <form method="post" id="signupForm">
+        {% csrf_token %}
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div>
+                <label for="{{ form.first_name.id_for_label }}" class="block text-gray-700 font-medium mb-2">First Name</label>
+                {{ form.first_name }}
+                {% if form.first_name.errors %}
+                    <p class="text-red-600 text-sm mt-1">{{ form.first_name.errors.0 }}</p>
+                {% endif %}
+            </div>
+            
+            <div>
+                <label for="{{ form.last_name.id_for_label }}" class="block text-gray-700 font-medium mb-2">Last Name</label>
+                {{ form.last_name }}
+                {% if form.last_name.errors %}
+                    <p class="text-red-600 text-sm mt-1">{{ form.last_name.errors.0 }}</p>
+                {% endif %}
+            </div>
+        </div>
+        
+        <div class="mb-4">
+            <label for="{{ form.age.id_for_label }}" class="block text-gray-700 font-medium mb-2">Age (must be 18+)</label>
+            {{ form.age }}
+            {% if form.age.errors %}
+                <p class="text-red-600 text-sm mt-1">{{ form.age.errors.0 }}</p>
+            {% endif %}
+        </div>
+        
+        <div class="mb-4">
+            <label for="{{ form.profession.id_for_label }}" class="block text-gray-700 font-medium mb-2">Profession</label>
+            {{ form.profession }}
+            {% if form.profession.errors %}
+                <p class="text-red-600 text-sm mt-1">{{ form.profession.errors.0 }}</p>
+            {% endif %}
+        </div>
+        
+        <!-- Profession-specific fields -->
+        <div id="business_field" class="mb-4 hidden">
+            <label for="{{ form.business_name.id_for_label }}" class="block text-gray-700 font-medium mb-2">Business Name</label>
+            {{ form.business_name }}
+        </div>
+        
+        <div id="employee_field" class="mb-4 hidden">
+            <label for="{{ form.company_name.id_for_label }}" class="block text-gray-700 font-medium mb-2">Company Name</label>
+            {{ form.company_name }}
+        </div>
+        
+        <div id="freelancer_field" class="mb-4 hidden">
+            <label for="{{ form.services_provided.id_for_label }}" class="block text-gray-700 font-medium mb-2">Services Provided</label>
+            {{ form.services_provided }}
+        </div>
+        
+        <div id="student_field" class="mb-4 hidden">
+            <label for="{{ form.school_name.id_for_label }}" class="block text-gray-700 font-medium mb-2">School/College Name</label>
+            {{ form.school_name }}
+        </div>
+        
+        <div class="mb-4">
+            <label for="{{ form.bio.id_for_label }}" class="block text-gray-700 font-medium mb-2">Bio (50-150 words)</label>
+            {{ form.bio }}
+            {% if form.bio.errors %}
+                <p class="text-red-600 text-sm mt-1">{{ form.bio.errors.0 }}</p>
+            {% endif %}
+            <p class="text-gray-500 text-sm mt-1"><span id="bioCount">0</span>/150 words</p>
+        </div>
+        
+        <div class="mb-4">
+            <label for="{{ form.hobbies.id_for_label }}" class="block text-gray-700 font-medium mb-2">Hobbies</label>
+            {{ form.hobbies }}
+            {% if form.hobbies.errors %}
+                <p class="text-red-600 text-sm mt-1">{{ form.hobbies.errors.0 }}</p>
+            {% endif %}
+        </div>
+        
+        <div class="mb-4">
+            <label for="{{ form.username.id_for_label }}" class="block text-gray-700 font-medium mb-2">Username</label>
+            {{ form.username }}
+            {% if form.username.errors %}
+                <p class="text-red-600 text-sm mt-1">{{ form.username.errors.0 }}</p>
+            {% endif %}
+        </div>
+        
+        <div class="flex justify-between mt-6">
+            <a href="{% url 'index' %}" class="bg-gray-200 hover:bg-gray-300 text-gray-800 py-2 px-4 rounded-lg font-medium">
+                Cancel
+            </a>
+            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg font-medium">
+                Next
+            </button>
+        </div>
+    </form>
+    
+    <div class="mt-4 text-center">
+        <p class="text-gray-600">Already have an account? <a href="{% url 'login' %}" class="text-blue-600 hover:underline">Login</a></p>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Show/hide profession-specific fields
+    document.addEventListener('DOMContentLoaded', function() {
+        const professionSelect = document.getElementById('{{ form.profession.id_for_label }}');
+        const businessField = document.getElementById('business_field');
+        const employeeField = document.getElementById('employee_field');
+        const freelancerField = document.getElementById('freelancer_field');
+        const studentField = document.getElementById('student_field');
+        
+        function updateFields() {
+            // Hide all fields first
+            businessField.classList.add('hidden');
+            employeeField.classList.add('hidden');
+            freelancerField.classList.add('hidden');
+            studentField.classList.add('hidden');
+            
+            // Show the relevant field based on selection
+            if (professionSelect.value === 'business') {
+                businessField.classList.remove('hidden');
+            } else if (professionSelect.value === 'employee') {
+                employeeField.classList.remove('hidden');
+            } else if (professionSelect.value === 'freelancer') {
+                freelancerField.classList.remove('hidden');
+            } else if (professionSelect.value === 'student') {
+                studentField.classList.remove('hidden');
+            }
+        }
+        
+        // Update on page load
+        updateFields();
+        
+        // Update when selection changes
+        professionSelect.addEventListener('change', updateFields);
+        
+        // Bio word count
+        const bioTextarea = document.getElementById('{{ form.bio.id_for_label }}');
+        const bioCount = document.getElementById('bioCount');
+        
+        function updateWordCount() {
+            const text = bioTextarea.value.trim();
+            const wordCount = text ? text.split(/\s+/).length : 0;
+            bioCount.textContent = wordCount;
+            
+            if (wordCount < 50 || wordCount > 150) {
+                bioCount.classList.add('text-red-600');
+                bioCount.classList.remove('text-gray-500');
+            } else {
+                bioCount.classList.remove('text-red-600');
+                bioCount.classList.add('text-gray-500');
+            }
+        }
+        
+        // Update on page load
+        updateWordCount();
+        
+        // Update when text changes
+        bioTextarea.addEventListener('input', updateWordCount);
+    });
+</script>
+{% endblock %}

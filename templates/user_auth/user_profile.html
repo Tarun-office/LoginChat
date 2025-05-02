@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ profile.user.get_full_name }}{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <div class="bg-white rounded-lg shadow-md overflow-hidden">
+        <div class="p-6 md:p-8">
+            <div class="flex flex-col md:flex-row gap-8">
+                <div class="md:w-1/3">
+                    {% if profile.profile_image %}
+                        <img src="{{ profile.profile_image.url }}" alt="{{ profile.user.get_full_name }}" class="w-full h-auto rounded-lg">
+                    {% else %}
+                        <div class="w-full h-64 bg-gray-200 rounded-lg flex items-center justify-center">
+                            <span class="text-gray-500">No profile image</span>
+                        </div>
+                    {% endif %}
+                </div>
+                
+                <div class="md:w-2/3">
+                    <h1 class="text-3xl font-bold text-gray-900 mb-2">{{ profile.user.get_full_name }}</h1>
+                    <p class="text-gray-600 mb-4">@{{ profile.username }}</p>
+                    
+                    <div class="mb-6">
+                        <span class="inline-block bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">
+                            {{ profile.get_profession_display }}
+                        </span>
+                        {% if profile.get_profession_detail %}
+                            <span class="text-gray-600 ml-2">{{ profile.get_profession_detail }}</span>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-6">
+                        <h2 class="text-xl font-semibold text-gray-800 mb-2">Bio</h2>
+                        <p class="text-gray-600">{{ profile.bio }}</p>
+                    </div>
+                    
+                    <div>
+                        <h2 class="text-xl font-semibold text-gray-800 mb-2">Hobbies</h2>
+                        <p class="text-gray-600">{{ profile.hobbies }}</p>
+                    </div>
+                </div>
+            </div>
+            
+            {% if profile.card_image1 or profile.card_image2 or profile.card_image3 or profile.card_image4 %}
+                <div class="mt-10">
+                    <h2 class="text-2xl font-semibold text-gray-800 mb-4">Gallery</h2>
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                        {% if profile.card_image1 %}
+                            <div class="rounded-lg overflow-hidden shadow-md">
+                                <img src="{{ profile.card_image1.url }}" alt="Gallery image 1" class="w-full h-48 object-cover">
+                            </div>
+                        {% endif %}
+                        
+                        {% if profile.card_image2 %}
+                            <div class="rounded-lg overflow-hidden shadow-md">
+                                <img src="{{ profile.card_image2.url }}" alt="Gallery image 2" class="w-full h-48 object-cover">
+                            </div>
+                        {% endif %}
+                        
+                        {% if profile.card_image3 %}
+                            <div class="rounded-lg overflow-hidden shadow-md">
+                                <img src="{{ profile.card_image3.url }}" alt="Gallery image 3" class="w-full h-48 object-cover">
+                            </div>
+                        {% endif %}
+                        
+                        {% if profile.card_image4 %}
+                            <div class="rounded-lg overflow-hidden shadow-md">
+                                <img src="{{ profile.card_image4.url }}" alt="Gallery image 4" class="w-full h-48 object-cover">
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    
+    <div class="mt-6">
+        <a href="{% url 'user_directory' %}" class="inline-block bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium">
+            Back to Directory
+        </a>
+    </div>
+</div>
+{% endblock %}
